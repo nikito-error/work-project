@@ -1,0 +1,125 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<list>
+#include<iterator>
+#include<cstring>
+#include<fstream>
+#include <bits/stdc++.h>
+using namespace std;
+class Student {	private:
+string name;
+vector<int>oc;
+public:
+Student(){name=1;oc;}
+Student(string nm)
+{	name=nm;}
+Student(string nm, vector<int>&v)
+{name=nm; oc=v;}
+string getname()
+{	return name;}
+void setname(string nm)
+{	name=nm;}
+void print() 
+    {        for (int i = 0; i < oc.size(); i++) 
+            cout<<"name="<<name<<" "<<"ocenka="<<oc[i] << " "; } 
+vector<int>& getoc()
+{	return oc;}
+void setoc(vector<int>&v)
+{	oc=v;}
+void addoc(int k)
+{oc.push_back(k);}
+double srusp()
+{vector<int>::iterator i; 
+double sr=0;
+       for (i = oc.begin(); i != oc.end(); ++i) 
+    {sr=sr+*i;} cout<<sr/oc.size()<<endl;}
+int broioc(int k)
+{vector<int>::iterator i; 
+int br=0;
+for (i = oc.begin(); i != oc.end(); ++i) 
+if(*i==2)
+br++;cout<<br;}
+bool deloc(int n)
+{vector<int>::iterator i; 
+for (i = oc.begin(); i != oc.end(); ++i) 
+if(*i==n)
+{oc.erase(i);
+return true;}
+else return false;}
+bool isGood()
+{vector<int>::iterator i; 
+double sr=0;
+    for (i = oc.begin(); i != oc.end(); ++i) 
+    {sr=sr+*i;} 
+	for (i = oc.begin(); i != oc.end(); ++i)
+	if(sr/oc.size() >= 4.50 && *i!=2)
+{return true;}
+else return false;}
+bool operator<=(Student &s)
+{if(srusp()<=s.srusp())
+return s.srusp();}
+friend ostream &operator<<(ostream &out,const Student &p)
+{	out<<p.name;
+return out;}
+friend istream &operator>>(istream &in,Student &p)
+{int d;int t=3;for(int i=0;i<t;i++)
+{in>>d;
+p.oc.push_back(d);}
+in>>p.name;
+return in;}};
+class Group
+{	private:
+	int grnumber;
+public:
+	Group()
+{	grnumber=0;}
+Group(int g)
+{	grnumber=g;}
+Group(const Group &p)
+{	grnumber=p.grnumber;}
+void print1()
+{	cout<<grnumber<<endl;}};
+int main()
+{vector<int> vec,p,t;
+for (int i = 6; i <=6; i++) t.push_back(i);
+  for (int i = 2; i <=2; i++) vec.push_back(i); 
+    for(int i=5;i<=5;i++)p.push_back(i);
+Student st("Petur",vec),st1("Ivan",p);
+st.print();st1.print();cout<<endl;
+cout<<"Dobavqme ocenki->"<<endl;st.addoc(3);st1.addoc(4);st.print();cout<<endl;st1.print();
+cout<<"Sredniqt uspeh na Petur=";st.srusp();cout<<"Sredniqt uspeh na Ivan=";st1.srusp();
+cout<<"Broqt na ocenkite na Petur ravni na dve-->";st.broioc(2);cout<<endl<<"Broqt na ocenkite na Ivan ravni na tri-->";st1.broioc(3);cout<<endl;
+st.deloc(2);st1.deloc(3);cout<<"Ocenkata ravna na 2 se iztriva-->";st.print();cout<<endl;st1.print();
+cout<<"\n /"<<st.isGood();cout<<" "<<st1.isGood()<<endl;
+list<Student> gr; 
+gr.push_back(Student("Ivan",vec));
+gr.push_back(Student ("Petranka",p));
+gr.push_back(Student ("Georgi",t));
+gr.push_back(Student ("Gergana",vec));
+gr.push_back(Student ("Tonka",p));
+list<Student>::iterator it;
+for(it=gr.begin();it!=gr.end();++it)
+{it->print();cout<<"\n";}
+double a=0;
+for(it=gr.begin();it!=gr.end();++it)
+{	a+=it->srusp();
+}cout<<a/5<<endl;
+string n;a=0;
+for(it=gr.begin();it!=gr.end();++it)
+{	if(a<it->srusp())
+{a=it->srusp();n=it->getname();}}
+cout<<n<<" "<<a;
+copy(gr.begin(),gr.end(),ostream_iterator<Student>(cout," "));
+ofstream file("prod.txt");
+copy(gr.begin(),gr.end(),ostream_iterator<Student>(file," "));
+file.close();
+ifstream file1("prod.txt");
+copy(istream_iterator<Student>(file1),
+istream_iterator<Student>(),
+back_inserter(gr));
+file1.close();
+for(it=gr.begin();it!=gr.end();++it)
+{	it->print();}
+system("pause");
+return 0;}
