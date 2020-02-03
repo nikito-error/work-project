@@ -1,0 +1,168 @@
+include <fstream> 
+#include <iostream> 
+#include <cstdlib> 
+#include <string.h> 
+#include <algorithm>
+
+using namespace std;
+const int N = 50; 
+const char Name[] = "my.dat";
+
+struct turist 
+{
+      char ime[20]; 
+      char familiq[20]; 
+      char pol[20]; 
+      char durjava[15]; 
+      char cena[20]; 
+      int dni; 
+};
+fstream fp; 
+ 
+
+void create(turist st[]) 
+{ 		int n;
+      do {
+            cout << "\n Broi turisti:";
+            cin >> n;
+      } while (n<1 || n>N); 
+      fp.open(Name, ios::binary | ios::out); 
+      if (!fp) { cout<< endl << "Error"; exit(1); } 
+      for (int i = 0; i<n; i++)
+      {
+            fflush(stdin); 
+            cout << "\n Ime na turist:"; cin >> st[i].ime;
+            cout << "\n Familiq na turist:"; cin >> st[i].familiq;
+          
+            cout << "\n Pol(muj=1/jena=2):"; cin >> st[i].pol;
+            cout << "\n Durjava:"; cin >> st[i].durjava;
+            cout << "\n Broi dni prestoi:"; cin >> st[i].dni;
+            cout << "\n Cena na noshtuvkata:"; cin >> st[i].cena;
+            cout<<"\n-------------------------------------------------\n";
+      }
+      fp.write((char*)st, n * sizeof(turist)); 
+      fp.close();
+}
+
+
+
+void output(turist st[]) 
+{
+      turist s;
+      cout << "\n Izvejdane  na vuvedenite turisti\n";
+      fp.open(Name, ios::binary | ios::in);
+      if (!fp) { cout << endl << "Error"; exit(1); }
+      fp.seekg(0L, ios::end);
+      long int pos = fp.tellg();
+      fp.close();
+      fp.open(Name, ios::binary | ios::in);
+      if (!fp) { cout << endl << "Error"; exit(1); }
+      for (long int i = 0; i < pos / (sizeof(turist)); i++)
+      {
+            fp.read((char*)&s, sizeof(turist));
+            st[i] = s;
+            cout << "\n Ime na turist:" << st[i].ime;
+            cout << "\n Familiq na turist:" << st[i].familiq;
+        
+            cout << "\n Pol(muj=1/jena=2):" << st[i].pol;
+            cout << "\n Drujava:" << st[i].durjava;
+            cout << "\n Broi dni prestoi:" << st[i].dni;
+            cout << "\n Cena za noshtuvkata:" << st[i].cena;
+			cout<<"\n--------------------------------------------------\n";
+      }
+      fp.close();
+}
+
+void search(turist st[]) 
+{
+      char durjava[20];
+      long int k = 0;
+      turist s;
+      cout << "\n Tursene na turist po durjava:";
+      cin >>durjava;
+      fp.open(Name, ios::binary | ios::in);
+      if (!fp) { cout << endl << "Error"; exit(1); }
+      fp.seekg(0L, ios::end); 
+      long int pos = fp.tellg(); 
+      fp.close();
+      fp.open(Name, ios::binary | ios::in);
+      if (!fp) { cout << endl << "Error"; exit(1); }
+      for (long int i = 0; i < pos / (sizeof(turist)); i++)
+      {
+            fp.read((char*)&s, sizeof(turist)); 
+            st[i] = s;
+            if (strcmp(st[i].durjava,durjava)==0)            {
+                  cout << "\n Ime na turist:" << st[i].ime;
+                  cout << "\n Familiq na turist:" << st[i].familiq;
+                  cout << "\n Pol(muj=1/jena=2)" << st[i].pol;
+                  cout << "\n Durjava:" << st[i].durjava;
+                  cout << "\n Broi dni prestoi:" << st[i].dni;
+                  cout << "\n Cena za noshtuvka:" << st[i].cena;
+                  cout<<"\n---------------------------------------------------------\n";
+                  k++;
+            }
+      }
+      if (k == 0) {
+            cout << "\n Ne e nameren turist \n";
+      }
+      fp.close(); 
+}
+void lect(turist st[])
+{
+char cena[20];
+long int k = 0;
+turist s;
+cout << "\n Tursene na turista zaplatil nai-golqma obshta suma za noshtuvkite v hotela:";
+cin >>cena;
+fp.open(Name, ios::binary | ios::in);
+      if (!fp) {cout << endl << "Error"; exit(1); }
+      fp.seekg(0L, ios::end); 
+      long int pos = fp.tellg(); 
+      fp.close();
+      fp.open(Name, ios::binary | ios::in); 
+      if (!fp) { cout << endl << "Error"; exit(1); }
+      for (long int i = 0; i < pos / (sizeof(turist)); i++)
+      {
+            fp.read((char*)&s, sizeof(turist)); 
+            st[i] = s;
+            if (strcmp(st[i].cena,cena)==0)
+            {
+	
+            	  cout << "\n Ime na turist:" << st[i].ime;
+                  cout << "\n Familiq na turist:" << st[i].familiq;
+                  cout << "\n Pol(muj=1/jena=2)" << st[i].pol;
+                  cout << "\n Durjava:" << st[i].durjava;
+                  cout << "\n Broi dni prestoi:" << st[i].dni;
+                  cout << "\n Cena za noshtuvka:" << st[i].cena;
+                  cout<<"\n---------------------------------------------------------\n";
+                  k++;
+            }
+      } 
+	   if (k == 0) {
+            cout << "\n Ne e namerena nai-golqma obshta suma \n";
+      }
+            fp.close();
+}
+int main() 
+{
+      struct turist st[N]; 
+      int ch;
+      do {
+            cout << "\n 1. Vuvedete danni za turist";
+            cout << "\n 2. Izvejdane na vuvedenite turisti";
+            cout << "\n 3. Tursene na turist po durjava";
+            cout << "\n 4. Tursene na turist zaplatil nai-golqma obshta suma";
+            cout << "\n 5. Exit";
+            do {
+                  cout << "\n Izberete:"; cin >> ch;
+            } while (ch < 1 || ch>5);
+            switch (ch)
+            {
+            case 1: create(st); break;
+            case 2: output(st); break;
+            case 3: search(st);break;
+            case 4: lect(st);break;
+            }
+      } while (ch != 5);
+      
+	  }
