@@ -1,4 +1,4 @@
-include <fstream> t
+include <fstream>
 #include <iostream> 
 #include <cstdlib> 
 #include <string.h> 
