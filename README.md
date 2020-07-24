@@ -114,4 +114,3 @@ max = -1;
 			       system("pause"); 
           return 0;
 } 
-t
